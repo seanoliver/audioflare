@@ -9,19 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "ai": "^2.2.15",
+    "multer": "^1.4.5-lts.1",
+    "next": "13.5.4",
+    "openai": "^4.12.1",
     "react": "^18",
-    "react-dom": "^18",
-    "next": "13.5.4"
+    "react-dom": "^18"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@types/multer": "^1.4.8",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10",
+    "eslint": "^8",
+    "eslint-config-next": "13.5.4",
     "postcss": "^8",
     "tailwindcss": "^3",
-    "eslint": "^8",
-    "eslint-config-next": "13.5.4"
+    "typescript": "^5"
   }
 }
