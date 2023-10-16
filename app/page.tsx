@@ -1,7 +1,6 @@
 'use client';
 
 import Chooser from '../components/chooser';
-import Header from '../components/header';
 import Transcript from '../components/transcript';
 import { useStore } from '../lib/store';
 

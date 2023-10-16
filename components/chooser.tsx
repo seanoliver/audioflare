@@ -1,17 +1,20 @@
 import { Tab } from '@headlessui/react';
 import Dropzone from './dropzone';
 import { useState } from 'react';
+import Recorder from './recorder';
 
 export default function Chooser() {
 	const [selectedTab, setSelectedTab] = useState(0);
-
 
 	const tabs = [
 		{
 			name: 'Upload File',
 			component: <Dropzone />,
 		},
-		{ name: 'Record Audio', component: 'Recording Here' },
+		{
+			name: 'Record Audio',
+			component: <Recorder />,
+		},
 	];
 
 	return (
