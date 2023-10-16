@@ -56,12 +56,6 @@ export default function Dropzone() {
 		}
 	}, [acceptedFiles, setFile]);
 
-	useEffect(() => {
-		if (transcript) {
-			setLoading(false);
-		}
-	}, [setLoading, transcript]);
-
 	return (
 		<form
 			onSubmit={handleFileSubmit}

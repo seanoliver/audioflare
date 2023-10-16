@@ -1,6 +1,7 @@
 'use client';
 
 import Chooser from '../components/chooser';
+import Header from '../components/header';
 import Transcript from '../components/transcript';
 import { useStore } from '../lib/store';
 
@@ -14,7 +15,7 @@ export default function Home() {
   });
 
 	return (
-		<div className='w-screen h-screen flex flex-col justify-center items-center'>
+		<div className='flex h-full w-full flex-col justify-center items-center'>
 			{submitted || transcript ? <Transcript /> : <Chooser />}
 		</div>
 	);

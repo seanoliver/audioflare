@@ -17,7 +17,7 @@ export default function Chooser() {
 	return (
 		<Tab.Group>
 			<Tab.List
-				className={`w-3/5 flex bg-slate-100 shadow dark:bg-slate-900 rounded-md m-3 p-1`}>
+				className={`w-3/5 flex bg-slate-50 shadow dark:bg-slate-900 rounded-md m-3 p-1`}>
 				{tabs.map((tab, index) => (
 					<Tab
 						key={tab.name}
