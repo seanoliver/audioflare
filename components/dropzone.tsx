@@ -1,10 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useStore } from '../lib/store';
 import DropzoneEmpty from './dropzone-empty';
 import DropzoneFull from './dropzone-full';
 
 export default function Dropzone() {
+  const [inDrag, setInDrag] = useState(false);
 	const { file, transcript, setFile, setLoading, setSubmitted, setTranscript } =
 		useStore(state => {
 			return {
@@ -17,22 +18,29 @@ export default function Dropzone() {
 			};
 		});
 
-	const { acceptedFiles, getRootProps, getInputProps, isDragActive } =
-		useDropzone({
-			accept: {
-				'audio/*': ['.mp3', '.wav', '.ogg', '.flac', '.m4a'],
-			},
-			onDrop: acceptedFiles => {
-				console.log('drop', acceptedFiles);
-			},
-			onDropAccepted: acceptedFiles => {
-				console.log('drop accepted', acceptedFiles);
-			},
-			onDropRejected: () => {
-				console.log('drop rejected');
-			},
-			multiple: false,
-		});
+	const handleFileSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const files = e.target.files;
+		processFiles(files);
+	};
+
+	const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+		e.preventDefault();
+		setInDrag(false);
+		const files = e.dataTransfer.files;
+		processFiles(files);
+	};
+
+	const processFiles = (files: FileList | null) => {
+		if (!files) return;
+
+		const audioFiles = Array.from(files).filter(file => file.type.startsWith('audio/'))
+		if (audioFiles.length === 0) {
+			console.log('No audio files detected.');
+			return;
+		} else {
+      setFile(audioFiles[0]);
+    }
+	};
 
 	const handleFileSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -50,23 +58,16 @@ export default function Dropzone() {
 		}
 	};
 
-	useEffect(() => {
-		if (acceptedFiles.length > 0) {
-			setFile(acceptedFiles[0]);
-		}
-	}, [acceptedFiles, setFile]);
-
 	return (
 		<form
 			onSubmit={handleFileSubmit}
-			className='w-full h-full'>
+			className='w-3/5 h-2/5'>
 			{file ? (
 				<DropzoneFull file={file} />
 			) : (
 				<DropzoneEmpty
-					getRootProps={getRootProps}
-					getInputProps={getInputProps}
-					isDragActive={isDragActive}
+          handleFileSelected={handleFileSelected}
+					inDrag={inDrag}
 				/>
 			)}
 		</form>

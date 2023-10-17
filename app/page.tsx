@@ -1,6 +1,6 @@
 'use client';
 
-import Chooser from '../components/chooser';
+import Dropzone from '../components/dropzone';
 import Transcript from '../components/transcript';
 import { useStore } from '../lib/store';
 
@@ -14,8 +14,8 @@ export default function Home() {
   });
 
 	return (
-		<div className='flex h-full w-full flex-col justify-center items-center'>
-			{submitted || transcript ? <Transcript /> : <Chooser />}
+		<div className='flex flex-col h-full w-full justify-center items-center'>
+			{submitted || transcript ? <Transcript /> : <Dropzone />}
 		</div>
 	);
 

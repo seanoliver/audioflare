@@ -17,7 +17,7 @@ export default function Loading() {
 	}, [setLoading, transcript]);
 
   return (
-    <div className='w-screen h-screen flex flex-col justify-center items-center'>
+    <div className='flex flex-col justify-center items-center'>
       <p className='animate-bounce'><RocketIcon /></p>
       <p className='font-extralight mt-4'>Loading...</p>
     </div>

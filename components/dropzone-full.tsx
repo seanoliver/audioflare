@@ -7,8 +7,6 @@ export default function DropzoneFull({
   file: File;
 }) {
 
-  
-
   return (
     <p className="text-xs text-slate-500 flex flex-col justify-center items-center w-full h-full">
       <p>{file.name}</p>
