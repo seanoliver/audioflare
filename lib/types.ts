@@ -15,3 +15,5 @@ export interface TranscriptButtonType {
 }
 
 export type TranscriptButtonsType = TranscriptButtonType[];
+
+export type SentimentType = { label: 'POSITIVE' | 'NEGATIVE', score: number }[];

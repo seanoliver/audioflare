@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { CLOUDFLARE_MODELS } from './constants';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -41,4 +42,18 @@ export const belowFileSizeLimit = (file: File) => {
   } else {
     return true;
   }
+}
+
+export const getGatewayUrl = (model: keyof typeof CLOUDFLARE_MODELS) => {
+  const {
+    CLOUDFLARE_REST_API_KEY: apiKey,
+  } = process.env;
+
+  const cfModel = CLOUDFLARE_MODELS[model];
+
+  const gatewayEndpoint = 'https://gateway.ai.cloudflare.com/v1'
+  const gatewayName = 'tldh'
+  const gatewayProvider = 'workers-ai'
+
+  return `${gatewayEndpoint}/${apiKey}/${gatewayName}/${gatewayProvider}/${cfModel}`
 }

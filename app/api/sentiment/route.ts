@@ -12,22 +12,24 @@ export async function POST(req: NextRequest) {
 
 	const headers = {
 		'Authorization': `Bearer ${authToken}`,
-		'Content-Type': 'application/octet-stream',
+		'Content-Type': 'application/json',
 	};
 
 	const data = await req.formData();
-	const file = data.get('file');
+	const text = data.get('text');
 
-	if (!file || typeof file === 'string')
-		return NextResponse.json({ error: 'No file provided' }, { status: 400 });
+	if (!text || typeof text !== 'string')
+		return NextResponse.json(
+			{ error: 'No transcript provided' },
+			{ status: 400 }
+		);
 
-	const buffer = Buffer.from(await file.arrayBuffer());
+	const url = getGatewayUrl('textClassification');
 
-	const url = getGatewayUrl('speechRecognition');
 	const response = await fetch(url, {
 		method: 'POST',
 		headers,
-		body: buffer,
+		body: JSON.stringify({ text }),
 	});
 
 	const result = await response.json();
