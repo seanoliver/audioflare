@@ -25,6 +25,8 @@ import { convertBytes } from '../lib/utils';
 import toast from 'react-hot-toast';
 import { TranscriptButtonsType } from '../lib/types';
 import { useEffect } from 'react';
+import { Skeleton } from "../components/ui/skeleton"
+
 
 export default function Transcript() {
 	const {
@@ -52,39 +54,13 @@ export default function Transcript() {
 	});
 
 	const handleCopy = async () => {
+    if (!file) return;
+    const content = `Transcript of ${file.name} (${convertBytes(file.size)})\n\n${transcript}\n\nSummary\n\n${summary}`
 		await navigator.clipboard.writeText(transcript);
 		toast.success('Copied to clipboard!');
 	};
 
-	// const handleSummarize = async () => {
-	// 	if (file) {
-	// 		setLoading(true);
-	// 		const formData = new FormData();
-	// 		formData.append('text', transcript);
-	// 		const response = await fetch('/api/summarize', {
-	// 			method: 'POST',
-	// 			body: formData,
-	// 		});
-	// 		const result = await response.json();
-	// 		setSummary(result.result.text);
-	// 	}
-	// };
-
-	const handleSummarize = () => {
-		if (file) {
-			setLoading(true);
-		}
-	};
-
 	const transcriptButtons: TranscriptButtonsType = [
-		{
-			name: 'Summarize',
-			icon: <ListBulletIcon />,
-			variant: 'default',
-			className:
-				'bg-slate-700 text-xs text-slate-100 px-4 py-1 rounded-md m-2 flex gap-2',
-			onClick: handleSummarize,
-		},
 		{
 			name: 'Copy',
 			icon: <CopyIcon />,
@@ -124,28 +100,47 @@ export default function Transcript() {
 			}
 		};
 
-		fetchSummary();
-	}, [loading]);
+		if (transcript) fetchSummary();
+	}, [transcript]);
 
-	if (loading) return <Loading />;
+	// if (loading) return <Loading />;
 
 	return (
 		<div className='w-4/6'>
-			<StyledCard
-				header='Transcript'
-				model='OpenAI Whisper'
-				content={transcript}
-			/>
-			{summary && (
-				<StyledCard
-					header='Summary'
-					model='Meta Llama 2 7b'
-					content={summary}
-				/>
-			)}
-      <TranscriptButtons transcriptButtons={transcriptButtons} />
+      {transcript ? (
+        <StyledCard
+          header={transcriptHeader}
+          model='OpenAI Whisper'
+          content={transcript}
+        />
+      ) : (
+        <LoadingCard />
+      )}
+      {summary ? (
+        <StyledCard
+          header='Summary'
+          model='Meta Llama 2 7b'
+          content={summary}
+        />
+      ) : (
+        <LoadingCard />
+      )}
+      {transcript && summary && <TranscriptButtons transcriptButtons={transcriptButtons} />}
 		</div>
 	);
+}
+
+const LoadingCard = () => {
+  return (
+    <Card className='dark:bg-slate-700 dark:text-slate-300 text-sm border-0 shadow my-4'>
+      <CardHeader>
+        <CardTitle className='uppercase text-xs tracking-wider'>Loading...</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Skeleton />
+      </CardContent>
+    </Card>
+  );
 }
 
 const StyledCard = ({
@@ -164,9 +159,6 @@ const StyledCard = ({
 				<CardDescription className='uppercase text-xs text-slate-400 tracking-wider'>{model}</CardDescription>
 			</CardHeader>
 			<CardContent>{content}</CardContent>
-			{/* <CardFooter>
-			<TranscriptButtons transcriptButtons={transcriptButtons} />
-		</CardFooter> */}
 		</Card>
 	);
 };

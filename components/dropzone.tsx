@@ -1,11 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
 import { useStore } from '../lib/store';
+import { isLongerThan30Seconds } from '../lib/utils';
 import DropzoneEmpty from './dropzone-empty';
 import DropzoneFull from './dropzone-full';
+import { processFiles, fetchTranscript } from '../lib/actions';
 
 export default function Dropzone() {
-  const [inDrag, setInDrag] = useState(false);
+	const [inDrag, setInDrag] = useState(false);
 	const { file, transcript, setFile, setLoading, setSubmitted, setTranscript } =
 		useStore(state => {
 			return {
@@ -18,43 +20,37 @@ export default function Dropzone() {
 			};
 		});
 
-	const handleFileSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setInDrag(true);
+  }
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setInDrag(false);
+  }
+
+	const handleFileSelected = (e: React.ChangeEvent<HTMLInputElement>): void => {
 		const files = e.target.files;
-		processFiles(files);
+		const audioFile = processFiles(files);
+    if (audioFile) setFile(audioFile)
 	};
 
 	const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
 		e.preventDefault();
 		setInDrag(false);
 		const files = e.dataTransfer.files;
-		processFiles(files);
-	};
-
-	const processFiles = (files: FileList | null) => {
-		if (!files) return;
-
-		const audioFiles = Array.from(files).filter(file => file.type.startsWith('audio/'))
-		if (audioFiles.length === 0) {
-			console.log('No audio files detected.');
-			return;
-		} else {
-      setFile(audioFiles[0]);
-    }
+		const audioFile = processFiles(files);
+    if (audioFile) setFile(audioFile)
 	};
 
 	const handleFileSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		if (file) {
-			setLoading(true);
+      setLoading(true);
 			setSubmitted(true);
-			const formData = new FormData();
-			formData.append('file', file);
-			const response = await fetch('/api/transcribe', {
-				method: 'POST',
-				body: formData,
-			});
-			const result = await response.json();
-			setTranscript(result.result.text);
+			const fetchedTranscript = await fetchTranscript(file);
+			setTranscript(fetchedTranscript);
 		}
 	};
 
@@ -66,7 +62,10 @@ export default function Dropzone() {
 				<DropzoneFull file={file} />
 			) : (
 				<DropzoneEmpty
-          handleFileSelected={handleFileSelected}
+					handleFileSelected={handleFileSelected}
+          handleDragOver={handleDragOver}
+          handleDragLeave={handleDragLeave}
+          handleDrop={handleDrop}
 					inDrag={inDrag}
 				/>
 			)}
