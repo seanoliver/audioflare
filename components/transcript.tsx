@@ -141,7 +141,7 @@ export default function Transcript() {
           body: formData,
         });
         const result = await response.json();
-        setTranslation(result.result);
+        setTranslation(result.result.translated_text);
         setLoading(false);
       }
     }
@@ -218,6 +218,7 @@ const StyledCard = ({
 	content: string | SentimentType;
 }) => {
 	const isSentiment = typeof content !== 'string';
+  console.log('isSentiment', header, isSentiment, content, typeof content)
 	return (
 		<Card className='dark:bg-slate-700 dark:text-slate-300 text-sm border-0 shadow my-4'>
 			<CardHeader>
