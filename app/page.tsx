@@ -1,7 +1,7 @@
 'use client';
 
 import Dropzone from '../components/dropzone';
-import Transcript from '../components/transcript';
+import Results from '../components/results';
 import { useStore } from '../lib/store';
 
 export default function Home() {
@@ -15,7 +15,7 @@ export default function Home() {
 
 	return (
 		<div className='flex flex-col h-full w-full justify-center items-center'>
-			{submitted || transcript ? <Transcript /> : <Dropzone />}
+			{submitted || transcript ? <Results /> : <Dropzone />}
 		</div>
 	);
 
