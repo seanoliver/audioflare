@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import Footer from '../components/footer';
 import { Toaster } from 'react-hot-toast';
+import Header from '../components/header';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -19,10 +20,10 @@ export default function RootLayout({
 	return (
 		<html lang='en'>
 			<body
-				className={`${inter.className} bg-slate-50 dark:bg-slate-900 text-slate-700 w-screen h-screen dark:text-slate-300 flex flex-col justify-center items-center`}>
-				<Toaster position='bottom-center' />
-        {/* <Header /> */}
-				{children}
+				className={`${inter.className} bg-slate-50 dark:bg-slate-900 text-slate-700 w-screen h-screen dark:text-slate-300 flex flex-col justify-between`}>
+				<Toaster position='bottom-right' />
+        <Header />
+				<div>{children}</div>
 				<Footer />
 			</body>
 		</html>

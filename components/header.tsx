@@ -1,8 +1,7 @@
 export default function Header() {
   return (
     <div className='flex flex-col justify-center items-center md:mt-40 mt-20'>
-      <p className='text-2xl font-extralight'>Too Long; Didn&apos;t Hear</p>
-      <span className='text-sm font-extralight'>Because even you aren&apos;t going to play back that voice memo you left yourself.</span>
+      <p className='text-2xl font-extralight'>Cloudflare AI Workers Audio Playground</p>
     </div>
   )
 }

@@ -1,16 +1,14 @@
-import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { SentimentType } from '../lib/types';
-import * as d3 from 'd3';
 
-export const BarChart = ({ data }: { data: SentimentType }) => {
+export const SentimentNums = ({ data }: { data: SentimentType }) => {
 	const labelValues = {
 		NEGATIVE: {
 			name: 'Negative',
-			color: 'bg-red-500',
+			color: 'text-red-500',
 		},
 		POSITIVE: {
 			name: 'Positive',
-			color: 'bg-green-500',
+			color: 'text-green-500',
 		},
 	};
 
@@ -27,12 +25,13 @@ export const BarChart = ({ data }: { data: SentimentType }) => {
 
 	return (
 		<div className='w-full'>
-			<div className='flex flex-row w-full'>
+			<div className='flex flex-row w-full justify-evenly my-4'>
 				{layoutData.map(d => (
 					<div
 						key={d.score}
-						className={`w-[${d.score}%] h-4 ${d.color}`}>
-
+						className={`${d.color} h-4 flex flex-col items-center justify-center `}>
+              <p className='text-xl font-semibold'>{d.score}%</p>
+              <p className='text-xs'>{d.name}</p>
 					</div>
 				))}
 			</div>

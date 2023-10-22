@@ -6,3 +6,15 @@ export const CLOUDFLARE_MODELS = {
   imageClassification: '@cf/microsoft/resnet-50',
   textEmbeddings: '@cf/baai/bge-base-en-v1.5'
 }
+
+export const CLOUDFLARE_TRANSLATION_LANGUAGES = [
+  "chinese",
+  "french",
+  "spanish",
+  "arabic",
+  "russian",
+  "german",
+  "japanese",
+  "portuguese",
+  "hindi"
+]

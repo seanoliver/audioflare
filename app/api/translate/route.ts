@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getGatewayUrl } from '../../../lib/utils';
 
 // https://developers.cloudflare.com/workers-ai/models/translation/
-const target_lang = 'spanish'
 
 export async function POST(req: NextRequest) {
 	const { CLOUDFLARE_AUTH_TOKEN: authToken } = process.env;
@@ -20,12 +19,19 @@ export async function POST(req: NextRequest) {
 
 	const data = await req.formData();
 	const text = data.get('text');
+  const target_lang = data.get('target_lang')
 
 	if (!text || typeof text !== 'string')
 		return NextResponse.json(
 			{ error: 'No transcript provided' },
 			{ status: 400 }
 		);
+
+  if (!target_lang || typeof target_lang !== 'string')
+    return NextResponse.json(
+      { error: 'No target language provided' },
+      { status: 400 }
+    );
 
 	const url = getGatewayUrl('translation');
 

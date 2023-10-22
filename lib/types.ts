@@ -1,3 +1,5 @@
+import { CLOUDFLARE_TRANSLATION_LANGUAGES } from './constants';
+
 export interface TranscriptButtonType {
 	name: string;
 	icon: React.ReactNode;
@@ -17,3 +19,9 @@ export interface TranscriptButtonType {
 export type TranscriptButtonsType = TranscriptButtonType[];
 
 export type SentimentType = { label: 'POSITIVE' | 'NEGATIVE', score: number }[];
+
+export type TargetLanguage = typeof CLOUDFLARE_TRANSLATION_LANGUAGES[number];
+
+export interface TranslationInterface {
+  [key: TargetLanguage]: string;
+}

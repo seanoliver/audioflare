@@ -1,15 +1,18 @@
-import {
-  CopyIcon,
-  Cross2Icon
-} from '@radix-ui/react-icons';
+'use client';
+
+import { CopyIcon, Cross2Icon } from '@radix-ui/react-icons';
 import { useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
-import { useStore } from '../lib/store';
-import { SentimentType, TranscriptButtonsType } from '../lib/types';
-import { convertBytes } from '../lib/utils';
-import { ActionButtons } from './action-buttons';
-import { LoadingCard } from './loading-card';
-import { StyledCard } from './styled-card';
+import { useStore } from '../../lib/store';
+import {
+	SentimentType,
+	TranscriptButtonsType,
+} from '../../lib/types';
+import { convertBytes } from '../../lib/utils';
+import { LoadingCard } from '../../components/loading-card';
+import { StyledCard } from '../../components/styled-card';
+import { useRouter } from 'next/navigation';
+import ResultControls from '../../components/result-controls';
 
 export default function Results() {
 	const {
@@ -18,11 +21,10 @@ export default function Results() {
 		transcript,
 		loading,
 		sentiment,
-		translation,
-		setLoading,
+		translations,
 		setSummary,
 		setSentiment,
-		setTranslation,
+		setTranslations,
 		clear,
 	} = useStore(state => {
 		return {
@@ -30,22 +32,25 @@ export default function Results() {
 			summary: state.summary,
 			transcript: state.transcript,
 			loading: state.loading,
-			translation: state.translation,
+			translations: state.translations,
 			sentiment: state.sentiment,
 			setLoading: state.setLoading,
 			setSummary: state.setSummary,
-			setTranslation: state.setTranslation,
+			setTranslations: state.setTranslations,
 			setSentiment: state.setSentiment,
 			clear: state.clear,
 		};
 	});
+
+	const router = useRouter();
+	if (!file) router.push('/');
 
 	const handleCopy = async () => {
 		if (!file) return;
 		const content = `Transcript of ${file.name} (${convertBytes(
 			file.size
 		)})\n\n${transcript}\n\nSummary\n\n${summary}`;
-		await navigator.clipboard.writeText(transcript);
+		await navigator.clipboard.writeText(content);
 		toast.success('Copied to clipboard!');
 	};
 
@@ -73,9 +78,10 @@ export default function Results() {
 			? `Transcript of ${file.name} (${convertBytes(file.size)})`
 			: 'Transcript';
 
+	/** Summary */
 	useEffect(() => {
 		const fetchSummary = async () => {
-			if (file && loading) {
+			if (file) {
 				const formData = new FormData();
 				formData.append('text', transcript);
 				const response = await fetch('/api/summarize', {
@@ -85,16 +91,16 @@ export default function Results() {
 				const result = await response.json();
 				console.log('result', result);
 				setSummary(result.result.response);
-				setLoading(false);
 			}
 		};
 
 		if (transcript) fetchSummary();
-	}, [transcript]);
+	}, [transcript, file, setSummary]);
 
+	/** Sentiment */
 	useEffect(() => {
 		const fetchSentiment = async () => {
-			if (transcript && loading) {
+			if (transcript) {
 				const formData = new FormData();
 				formData.append('text', transcript);
 				const response = await fetch('/api/sentiment', {
@@ -105,39 +111,52 @@ export default function Results() {
 				const result = await response.json();
 				result?.result?.map((item: any) => sentimentResponse.push(item));
 				setSentiment(sentimentResponse);
-				setLoading(false);
 			}
 		};
 		fetchSentiment();
-	}, [transcript]);
+	}, [transcript, setSentiment]);
 
+	/** Translation */
 	useEffect(() => {
 		const fetchTranslation = async () => {
-			if (transcript && loading) {
-				const formData = new FormData();
-				formData.append('text', transcript);
-				const response = await fetch('/api/translate', {
-					method: 'POST',
-					body: formData,
+			if (transcript) {
+				/** Run all the translation requests simultaneously. */
+				const promises = Object.keys(translations).map(async language => {
+					const formData = new FormData();
+					formData.append('text', transcript);
+					formData.append('target_lang', language);
+					const response = await fetch('/api/translate', {
+						method: 'POST',
+						body: formData,
+					});
+					const result = await response.json();
+					const newText = result.result.translated_text;
+					return { language, newText };
 				});
-				const result = await response.json();
-				setTranslation(result.result.translated_text);
-				setLoading(false);
+
+				const results = await Promise.all(promises);
+				results.forEach(({ language, newText }) => {
+					setTranslations(language, newText);
+				});
 			}
 		};
 		fetchTranslation();
-	}, [transcript]);
-
+	}, [transcript, setTranslations, translations]);
+  
+	console.log('translations', translations);
 	return (
-		<div className='w-4/6'>
+		<div className='mx-auto w-4/6'>
+			<div>
+				<ResultControls />
+			</div>
 			{transcript ? (
 				<StyledCard
-					header={transcriptHeader}
+					header='Transcript'
 					model='OpenAI Whisper'
 					content={transcript}
 				/>
 			) : (
-				<LoadingCard />
+				<LoadingCard header='Transcript' />
 			)}
 			{summary ? (
 				<StyledCard
@@ -146,7 +165,7 @@ export default function Results() {
 					content={summary}
 				/>
 			) : (
-				<LoadingCard />
+				<LoadingCard header='Summary' />
 			)}
 			{sentiment.length > 0 ? (
 				<StyledCard
@@ -155,20 +174,23 @@ export default function Results() {
 					content={sentiment}
 				/>
 			) : (
-				<LoadingCard />
+				<LoadingCard header='Sentiment' />
 			)}
-			{translation ? (
-				<StyledCard
-					header='Translation'
-					model='M2M100'
-					content={translation}
-				/>
-			) : (
-				<LoadingCard />
-			)}
-			{transcript && summary && (
-				<ActionButtons transcriptButtons={transcriptButtons} />
-			)}
+			{Object.keys(translations).map(language => {
+				return translations[language] ? (
+					<StyledCard
+						key={language}
+						header={`${language} Translation`}
+						model='M2M100'
+						content={translations[language]}
+					/>
+				) : (
+					<LoadingCard
+						key={language}
+						header={`${language} Translation`}
+					/>
+				);
+			})}
 		</div>
 	);
 }

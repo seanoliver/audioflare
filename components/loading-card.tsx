@@ -1,12 +1,13 @@
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Skeleton } from "./ui/skeleton";
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Skeleton } from './ui/skeleton';
 
-export const LoadingCard = () => {
+export const LoadingCard = ({ header }: { header: string }) => {
 	return (
 		<Card className='dark:bg-slate-700 dark:text-slate-300 text-sm border-0 shadow my-4'>
 			<CardHeader>
-				<CardTitle className='uppercase text-xs tracking-wider'>
-					Loading...
+				<CardTitle className='uppercase text-xs tracking-wider animate-pulse'>
+					<span>Loading</span>
+          <span className='ml-1 font-extralight'>{header}...</span>
 				</CardTitle>
 			</CardHeader>
 			<CardContent>
