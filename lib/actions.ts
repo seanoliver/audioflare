@@ -34,5 +34,5 @@ export const fetchTranscript = async (audio: File) => {
 		body: formData,
 	});
 	const result = await response.json();
-  return result.result.text;
+  return {text: result.result.text, timeTaken: result.timeTaken};
 };

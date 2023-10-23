@@ -57,3 +57,13 @@ export const getGatewayUrl = (model: keyof typeof CLOUDFLARE_MODELS) => {
 
   return `${gatewayEndpoint}/${apiKey}/${gatewayName}/${gatewayProvider}/${cfModel}`
 }
+
+export const msToTime = (duration: number) => {
+  const milliseconds = Math.floor((duration % 1000) / 100),
+    seconds = Math.floor((duration / 1000) % 60);
+
+
+  const secondsStr = (seconds < 10) ? seconds : seconds;
+
+  return secondsStr + "." + milliseconds + " seconds";
+}

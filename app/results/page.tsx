@@ -1,18 +1,14 @@
 'use client';
 
-import { CopyIcon, Cross2Icon } from '@radix-ui/react-icons';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import toast from 'react-hot-toast';
 import { LoadingCard } from '../../components/loading-card';
 import ResultControls from '../../components/result-controls';
 import { StyledCard } from '../../components/styled-card';
 import { useStore } from '../../lib/store';
 import {
-  SentimentType,
-  TranscriptButtonsType,
+  SentimentType
 } from '../../lib/types';
-import { convertBytes } from '../../lib/utils';
 
 export default function Results() {
 	const {
@@ -43,40 +39,6 @@ export default function Results() {
 	});
 
 	const router = useRouter();
-
-	const handleCopy = async () => {
-		if (!file) return;
-		const content = `Transcript of ${file.name} (${convertBytes(
-			file.size
-		)})\n\n${transcript}\n\nSummary\n\n${summary}`;
-		await navigator.clipboard.writeText(content);
-		toast.success('Copied to clipboard!');
-	};
-
-	const transcriptButtons: TranscriptButtonsType = [
-		{
-			name: 'Copy',
-			icon: <CopyIcon />,
-			variant: 'default',
-			className:
-				'bg-slate-700 text-xs text-slate-100 px-4 py-1 rounded-md m-2 flex gap-2',
-			onClick: handleCopy,
-		},
-		{
-			name: 'Clear',
-			icon: <Cross2Icon />,
-			variant: 'destructive',
-			className:
-				'bg-slate-700 text-xs text-slate-100 px-4 py-1 rounded-md m-2 flex gap-2',
-			onClick: clear,
-		},
-	];
-
-	const transcriptHeader =
-		file !== null
-			? `Transcript of ${file.name} (${convertBytes(file.size)})`
-			: 'Transcript';
-
   // Redirect to home if no file; needs to be in useEffect to avoid race condition
   useEffect(() => {
     if (!file) router.push('/');
@@ -87,32 +49,33 @@ export default function Results() {
 		const fetchSummary = async () => {
 			if (file) {
 				const formData = new FormData();
-				formData.append('text', transcript);
+				formData.append('text', transcript.text);
 				const response = await fetch('/api/summarize', {
 					method: 'POST',
 					body: formData,
 				});
 				const result = await response.json();
-				console.log('result', result);
-				setSummary(result.result.response);
+				console.log('summary > result', result);
+				setSummary({text: result.result.response, timeTaken: result.timeTaken});
 			}
 		};
 
-		if (transcript) fetchSummary();
+		if (transcript.text) fetchSummary();
 	}, [transcript, file, setSummary]);
 
 	/** Sentiment */
 	useEffect(() => {
 		const fetchSentiment = async () => {
-			if (transcript) {
+			if (transcript.text) {
 				const formData = new FormData();
-				formData.append('text', transcript);
+				formData.append('text', transcript.text);
 				const response = await fetch('/api/sentiment', {
 					method: 'POST',
 					body: formData,
 				});
 				const sentimentResponse: SentimentType = [];
 				const result = await response.json();
+        console.log('sentiment > result', result)
 				result?.result?.map((item: any) => sentimentResponse.push(item));
 				setSentiment(sentimentResponse);
 			}
@@ -123,19 +86,20 @@ export default function Results() {
 	/** Translation */
 	useEffect(() => {
 		const fetchTranslation = async () => {
-			if (transcript) {
+			if (transcript.text) {
 				/** Run all the translation requests simultaneously. */
 				const promises = Object.keys(translations).map(async language => {
 					const formData = new FormData();
-					formData.append('text', transcript);
+					formData.append('text', transcript.text);
 					formData.append('target_lang', language);
 					const response = await fetch('/api/translate', {
 						method: 'POST',
 						body: formData,
 					});
 					const result = await response.json();
+          console.log('translation > result', result)
 					const newText = result.result.translated_text;
-          const timeTaken = result.result.timeTaken;
+          const timeTaken = result.timeTaken;
 					return { language, newText, timeTaken};
 				});
 
@@ -148,26 +112,28 @@ export default function Results() {
 		fetchTranslation();
 	}, [transcript, setTranslations, translations]);
 
-	console.log('sentiment', sentiment);
+	console.log('transcript', transcript);
 	return (
 		<div className='mx-auto w-4/6'>
 			<div>
 				<ResultControls />
 			</div>
-			{transcript ? (
+			{transcript.text ? (
 				<StyledCard
 					header='Transcript'
 					model='OpenAI Whisper'
-					content={transcript}
+					content={transcript.text}
+          timeTaken={transcript.timeTaken}
 				/>
 			) : (
 				<LoadingCard header='Transcript' />
 			)}
-			{summary ? (
+			{summary.text ? (
 				<StyledCard
 					header='Summary'
 					model='Meta Llama 2 7b'
-					content={summary}
+					content={summary.text}
+          timeTaken={summary.timeTaken}
 				/>
 			) : (
 				<LoadingCard header='Summary' />
@@ -182,12 +148,12 @@ export default function Results() {
 				<LoadingCard header='Sentiment' />
 			)}
 			{Object.keys(translations).map(language => {
-				return translations[language] ? (
+				return translations[language].text ? (
 					<StyledCard
 						key={language}
 						header={`${language} Translation`}
 						model='M2M100'
-						content={translations[language]}
+						content={translations[language].text}
             timeTaken={translations[language].timeTaken}
 					/>
 				) : (
