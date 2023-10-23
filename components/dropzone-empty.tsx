@@ -57,7 +57,7 @@ export default function DropzoneEmpty({
 					accept='audio/*'
 				/>
 				<div
-					className={`flex justify-center flex-col sm:px-10 px-4 transition-all gap-4 ease-in-out duration-300 text-indigo-500 items-center text-xs h-full py-24 w-full border-2 rounded-md border-dashed border-indigo-400 ${
+					className={`flex justify-center flex-col sm:px-10 px-4 transition-all gap-4 ease-in-out duration-300 items-center text-xs h-full py-24 w-full border-2 rounded-md border-dashed border-indigo-400 ${
 						inDrag ? 'bg-indigo-300 dark:bg-indigo-700' : ''
 					}`}>
 					<p>Drop an audio file here, or click to select one.</p>
@@ -65,7 +65,7 @@ export default function DropzoneEmpty({
 				</div>
 			</div>
 			<div>
-				<p className='text-xs mt-8 text-center text-indigo-800'>No audio file? Try one of these to get started:</p>
+				<p className='text-xs mt-8 text-center'>No audio file? Try one of these to get started:</p>
 				<div className='flex gap-2 mt-2'>
 					{aacs.map((aac, index) => {
 						const name = ['pacino', 'crowe', 'trump'][index];

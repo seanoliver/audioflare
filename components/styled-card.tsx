@@ -16,10 +16,12 @@ export const StyledCard = ({
 	header,
 	model,
 	content,
+  timeTaken
 }: {
 	header: string;
 	model: string;
 	content: string | SentimentType;
+  timeTaken?: number;
 }) => {
 	const chartRef = useRef<HTMLDivElement>() as MutableRefObject<HTMLDivElement>;
 	const isSentiment = typeof content !== 'string';
@@ -45,7 +47,7 @@ export const StyledCard = ({
 						{header}
 					</CardTitle>
 					<CardDescription className='uppercase text-xs text-slate-400 tracking-wider'>
-						{model}
+						{model} ⋅ {timeTaken ? `${timeTaken}ms` : ''}
 					</CardDescription>
 				</div>
         <div>

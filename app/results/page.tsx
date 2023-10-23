@@ -188,6 +188,7 @@ export default function Results() {
 						header={`${language} Translation`}
 						model='M2M100'
 						content={translations[language]}
+            timeTaken={translations[language].timeTaken}
 					/>
 				) : (
 					<LoadingCard

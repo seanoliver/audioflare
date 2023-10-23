@@ -1,36 +1,40 @@
 import { create } from 'zustand';
-import { SentimentType, TargetLanguage, TranslationInterface } from './types';
+import { SentimentType, TargetLanguage, TranslationInterface, ResponseWithTime } from './types';
 import { CLOUDFLARE_TRANSLATION_LANGUAGES } from './constants';
 
 interface Store {
-	transcript: string;
+	transcript: ResponseWithTime;
 	file: File | null;
-	summary: string;
+	summary: ResponseWithTime;
 	loading: boolean;
 	submitted: boolean;
 	sentiment: SentimentType;
 	translations: TranslationInterface;
-	setTranscript: (transcript: string) => void;
+	setTranscript: (transcript: ResponseWithTime) => void;
 	setFile: (file: File | null) => void;
 	setLoading: (loading: boolean) => void;
-	setSummary: (summary: string) => void;
+	setSummary: (summary: ResponseWithTime) => void;
 	setSubmitted: (submitted: boolean) => void;
 	setSentiment: (sentiment: SentimentType) => void;
-	setTranslations: (language: TargetLanguage, text: string) => void;
+	setTranslations: (language: TargetLanguage, text: string, timeTaken: number) => void;
 	clear: () => void;
 }
 
 const initialTranslations = (): TranslationInterface => {
 	const translations: TranslationInterface = {};
 	for (const language of CLOUDFLARE_TRANSLATION_LANGUAGES) {
-		translations[language] = '';
+		translations[language] = {text: '', timeTaken: 0};
 	}
 	return translations;
 };
 
+const initialResponse = (): ResponseWithTime => {
+  return { text: '', timeTaken: 0 };
+}
+
 const initialState = {
-	transcript: '',
-	summary: '',
+	transcript: initialResponse(),
+	summary: initialResponse(),
 	file: null,
 	loading: false,
 	submitted: false,
@@ -40,19 +44,21 @@ const initialState = {
 
 export const useStore = create<Store>(set => ({
 	...initialState,
-	setTranscript: (transcript: string) => set({ transcript }),
+	setTranscript: (transcript: ResponseWithTime) => set({ transcript }),
 	setFile: (file: File | null) => set({ file }),
 	setLoading: (loading: boolean) => set({ loading }),
 	setSubmitted: (submitted: boolean) => set({ submitted }),
-	setSummary: (summary: string) => set({ summary }),
+	setSummary: (summary: ResponseWithTime) => set({ summary }),
 	setSentiment: (sentiment: SentimentType) => set({ sentiment }),
-	setTranslations: (language: TargetLanguage, text: string) => {
-		const currentText = text;
+	setTranslations: (language: TargetLanguage, text: string, timeTaken: number) => {
 		set(state => ({
 			...state,
 			translations: {
 				...state.translations,
-				[language]: currentText,
+				[language]: {
+          text,
+          timeTaken,
+        },
 			},
 		}));
 	},

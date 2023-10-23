@@ -8,8 +8,8 @@ import Header from '../components/header';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-	title: 'Cloudflare AI Workers Audio Playground',
-	description: 'A playground for Cloudflare AI Workers Audio',
+	title: 'Audioflare',
+	description: 'Transcribe, Analyze, Translate: All in One Cloudflare Playground',
 };
 
 export default function RootLayout({

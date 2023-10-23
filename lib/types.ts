@@ -22,6 +22,11 @@ export type SentimentType = { label: 'POSITIVE' | 'NEGATIVE', score: number }[];
 
 export type TargetLanguage = typeof CLOUDFLARE_TRANSLATION_LANGUAGES[number];
 
+export type ResponseWithTime = {
+  text: string;
+  timeTaken: number;
+}
+
 export interface TranslationInterface {
-  [key: TargetLanguage]: string;
+  [key: TargetLanguage]: ResponseWithTime;
 }
