@@ -35,7 +35,7 @@ export default function DropzoneEmpty({
 				data-file={name}
 				draggable='true'
 				onDragStart={handleDragStart}
-				className='text-xs w-1/3 bg-gray-200 rounded-md p-2 text-center hover:shadow drag:shadow'>
+				className='text-xs w-1/3 bg-indigo-100 border-indigo-200 border-2 rounded-md p-2 text-center hover:shadow drag:shadow'>
 				{filename}
 			</a>
 		);
@@ -57,15 +57,15 @@ export default function DropzoneEmpty({
 					accept='audio/*'
 				/>
 				<div
-					className={`flex justify-center flex-col sm:px-10 px-4 transition-all gap-4 ease-in-out duration-300 text-slate-500 items-center text-xs h-full py-24 w-full border-2 rounded-md border-dashed border-slate-400 ${
-						inDrag ? 'bg-slate-300 dark:bg-slate-700' : ''
+					className={`flex justify-center flex-col sm:px-10 px-4 transition-all gap-4 ease-in-out duration-300 text-indigo-500 items-center text-xs h-full py-24 w-full border-2 rounded-md border-dashed border-indigo-400 ${
+						inDrag ? 'bg-indigo-300 dark:bg-indigo-700' : ''
 					}`}>
 					<p>Drop an audio file here, or click to select one.</p>
 					<p>Max duration: 30 seconds</p>
 				</div>
 			</div>
 			<div>
-				<p className='text-xs mt-8 text-center text-gray-500'>No audio file? Try one of these to get started:</p>
+				<p className='text-xs mt-8 text-center text-indigo-800'>No audio file? Try one of these to get started:</p>
 				<div className='flex gap-2 mt-2'>
 					{aacs.map((aac, index) => {
 						const name = ['pacino', 'crowe', 'trump'][index];

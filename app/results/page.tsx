@@ -1,18 +1,18 @@
 'use client';
 
 import { CopyIcon, Cross2Icon } from '@radix-ui/react-icons';
-import { useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import toast from 'react-hot-toast';
+import { LoadingCard } from '../../components/loading-card';
+import ResultControls from '../../components/result-controls';
+import { StyledCard } from '../../components/styled-card';
 import { useStore } from '../../lib/store';
 import {
-	SentimentType,
-	TranscriptButtonsType,
+  SentimentType,
+  TranscriptButtonsType,
 } from '../../lib/types';
 import { convertBytes } from '../../lib/utils';
-import { LoadingCard } from '../../components/loading-card';
-import { StyledCard } from '../../components/styled-card';
-import { useRouter } from 'next/navigation';
-import ResultControls from '../../components/result-controls';
 
 export default function Results() {
 	const {
@@ -43,7 +43,6 @@ export default function Results() {
 	});
 
 	const router = useRouter();
-	if (!file) router.push('/');
 
 	const handleCopy = async () => {
 		if (!file) return;
@@ -77,6 +76,11 @@ export default function Results() {
 		file !== null
 			? `Transcript of ${file.name} (${convertBytes(file.size)})`
 			: 'Transcript';
+
+  // Redirect to home if no file; needs to be in useEffect to avoid race condition
+  useEffect(() => {
+    if (!file) router.push('/');
+  }, [file, router]);
 
 	/** Summary */
 	useEffect(() => {
@@ -131,19 +135,20 @@ export default function Results() {
 					});
 					const result = await response.json();
 					const newText = result.result.translated_text;
-					return { language, newText };
+          const timeTaken = result.result.timeTaken;
+					return { language, newText, timeTaken};
 				});
 
 				const results = await Promise.all(promises);
-				results.forEach(({ language, newText }) => {
-					setTranslations(language, newText);
+				results.forEach(({ language, newText, timeTaken }) => {
+					setTranslations(language, newText, timeTaken);
 				});
 			}
 		};
 		fetchTranslation();
 	}, [transcript, setTranslations, translations]);
-  
-	console.log('translations', translations);
+
+	console.log('sentiment', sentiment);
 	return (
 		<div className='mx-auto w-4/6'>
 			<div>

@@ -52,7 +52,7 @@ export default function ResultControls() {
 				<CardTitle className='uppercase text-xs tracking-wider leading-none'>
 					{name}
 				</CardTitle>
-				<CardDescription className='uppercase text-xs text-slate-400 tracking-wider leading-none'>
+				<CardDescription className='uppercase text-xs text-indigo-400 tracking-wider leading-none'>
 					{convertBytes(size)}
 				</CardDescription>
 			</CardHeader>

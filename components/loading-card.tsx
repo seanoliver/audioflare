@@ -3,7 +3,7 @@ import { Skeleton } from './ui/skeleton';
 
 export const LoadingCard = ({ header }: { header: string }) => {
 	return (
-		<Card className='dark:bg-slate-700 dark:text-slate-300 text-sm border-0 shadow my-4'>
+		<Card className='dark:bg-indigo-700 dark:text-indigo-300 text-sm border-0 shadow my-4'>
 			<CardHeader>
 				<CardTitle className='uppercase text-xs tracking-wider animate-pulse'>
 					<span>Loading</span>

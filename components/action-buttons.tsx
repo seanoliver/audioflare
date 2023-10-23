@@ -25,7 +25,7 @@ export const ActionButtons = ({
 							</TooltipTrigger>
 							<TooltipContent
 								side='bottom'
-								className='dark:bg-slate-600 bg-slate-400'>
+								className='dark:bg-indigo-600 bg-indigo-400'>
 								{button.name}
 							</TooltipContent>
 						</Tooltip>
