@@ -1,7 +1,7 @@
 <a name="readme-top"></a>
 <div align="center">
   <a href="https://github.com/seanoliver/audioflare">
-    <img src="public/images/audioflare-header.svg" alt="Audioflare Logo">
+    <img src="public/images/audioflare-header.png" alt="Audioflare Logo">
   </a>
 
   <h1 align="center">Audioflare</h1>
@@ -52,8 +52,6 @@
 </details>
 
 <!-- ABOUT THE PROJECT -->
-
-## About The Project
 
 ## About This Project
 
