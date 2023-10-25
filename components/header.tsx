@@ -1,6 +1,6 @@
 import { FileIcon, GitHubLogoIcon, QuestionMarkCircledIcon } from "@radix-ui/react-icons";
 import { Button } from "./ui/button";
-import { Separator } from "./ui/separator"
+import Image from "next/image";
 
 export default function Header() {
   return (
@@ -13,7 +13,8 @@ export function SeparatorDemo() {
     <div className="flex flex-col items-center my-20">
       <div className='h-1'></div>
       <div className="space-y-1">
-        <h4 className="text-lg font-semibold leading-none text-center">Audioflare</h4>
+      <div style={{ backgroundImage: 'var(--logo)', width: '400px', height: '225px', backgroundSize: 'cover' }} alt="Audioflare" />
+        {/* <h4 className="text-lg font-semibold leading-none text-center">Audioflare</h4> */}
         <p className="text-sm text-muted-foreground text-center">
           Transcribe, Analyze, Translate: All in One Cloudflare Playground
         </p>

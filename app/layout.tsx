@@ -28,4 +28,4 @@ export default function RootLayout({
 			</body>
 		</html>
 	);
-}7
+}

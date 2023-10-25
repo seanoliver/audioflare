@@ -35,7 +35,7 @@ export default function DropzoneEmpty({
 				data-file={name}
 				draggable='true'
 				onDragStart={handleDragStart}
-				className='text-xs w-1/3 bg-orange-100 border-orange-200 border-2 rounded-md p-2 text-center hover:shadow drag:shadow'>
+				className='flex items-center text-xs w-1/3 bg-orange-100 border-orange-200 border-2 rounded-md p-2 text-center hover:shadow drag:shadow'>
 				{filename}
 			</a>
 		);
