@@ -36,12 +36,6 @@ export default function Results() {
 		};
 	});
 
-  const [completed, setCompleted] = useState({
-    summary: false,
-    sentiment: false,
-    translations: false,
-  });
-
 	const router = useRouter();
 	// Redirect to home if no file
 	useEffect(() => {
@@ -50,7 +44,7 @@ export default function Results() {
 
 	/** Summary */
 	useEffect(() => {
-    if (summary.text) return;
+		if (summary.text) return;
 		const fetchSummary = async () => {
 			if (file) {
 				const formData = new FormData();
@@ -72,7 +66,7 @@ export default function Results() {
 
 	/** Sentiment */
 	useEffect(() => {
-    if (sentiment.length > 0) return;
+		if (sentiment.length > 0) return;
 		const fetchSentiment = async () => {
 			if (transcript.text) {
 				const formData = new FormData();
@@ -96,7 +90,12 @@ export default function Results() {
 			if (transcript.text) {
 				/** Run all the translation requests simultaneously. */
 				const promises = Object.keys(translations).map(async language => {
-          if (translations[language].text) return;
+					if (translations[language].text)
+						return {
+							language,
+							newText: translations[language].text,
+							timeTaken: translations[language].timeTaken,
+						};
 					const formData = new FormData();
 					formData.append('text', transcript.text);
 					formData.append('target_lang', language);

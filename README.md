@@ -7,7 +7,7 @@
   <h1 align="center">Audioflare</h1>
 
   <p align="center">
-    An all-in-one AI audio playground using Cloudflare AI Workers to transcribe, analyze, summarize, and translate any audio files.
+    An all-in-one AI audio playground using Cloudflare AI Workers to transcribe, analyze, summarize, and translate any audio file.
     <br />
     <br />
     <a href="https://audioflare.seanoliver.dev/" target="_blank">View Demo</a>
