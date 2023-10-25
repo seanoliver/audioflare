@@ -27,7 +27,7 @@ export default function ResultControls() {
 			<audio
 				controls
 				src={audioSrc}
-        className='w-full h-10 text-xs border-2 rounded-md'>
+        className='w-full h-10 text-xs'>
 				Your browser does not support the audio element.
 			</audio>
 		);
@@ -42,24 +42,25 @@ export default function ResultControls() {
 
   useEffect(() => {
     if (!file) {
+      clear();
       router.push('/');
     }
   }, [file, router]);
 
 	return (
-		<Card className='bg-indigo-50 mt-4'>
+		<Card>
 			<CardHeader className='flex flex-col'>
 				<CardTitle className='uppercase text-xs tracking-wider leading-none'>
 					{name}
 				</CardTitle>
-				<CardDescription className='uppercase text-xs text-indigo-400 tracking-wider leading-none'>
+				<CardDescription className='uppercase text-xs tracking-wider leading-none'>
 					{convertBytes(size)}
 				</CardDescription>
 			</CardHeader>
 			<CardContent className='flex flex-col gap-4'>
 				<AudioPlayer />
 				<Button
-					className='text-xs uppercase bg-indigo-200 text-indigo-800 hover:bg-indigo-100 dark:hover:bg-indigo-800 dark:bg-indigo-900 dark:text-indigo-200 flex flex-row justify-center items-center gap-2'
+					className='text-xs uppercase flex flex-row justify-center items-center gap-2'
 					variant={'default'}
           onClick={handleRestart}>
 					<ReloadIcon />

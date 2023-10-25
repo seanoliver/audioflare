@@ -10,10 +10,10 @@ export default function Header() {
 
 export function SeparatorDemo() {
   return (
-    <div className="flex flex-col items-center mt-20">
+    <div className="flex flex-col items-center my-20">
       <div className='h-1'></div>
       <div className="space-y-1">
-        <h4 className="text-lg font-semibold leading-none text-center text-black">Audioflare</h4>
+        <h4 className="text-lg font-semibold leading-none text-center">Audioflare</h4>
         <p className="text-sm text-muted-foreground text-center">
           Transcribe, Analyze, Translate: All in One Cloudflare Playground
         </p>

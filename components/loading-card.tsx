@@ -13,8 +13,8 @@ export const LoadingCard = ({ header }: { header: string }) => {
 			<CardContent>
 				<div className='flex items-center space-x-4'>
 					<div className='space-y-2'>
-						<Skeleton className='h-4 w-[200px] md:w-[300px] lg:w-[350px] xl:w-[400px] 2xl:w-[450px]' />
-						<Skeleton className='h-4 w-[150px] md:w-[250px] lg:w-[300px] xl:w-[350px] 2xl:w-[400px]' />
+						<Skeleton className='h-4 w-[150px] md:w-[250px]' />
+						<Skeleton className='h-4 w-[100px] md:w-[200px]' />
 					</div>
 				</div>
 			</CardContent>

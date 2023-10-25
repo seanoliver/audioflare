@@ -1,14 +1,12 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { LoadingCard } from '../../components/loading-card';
 import ResultControls from '../../components/result-controls';
 import { StyledCard } from '../../components/styled-card';
 import { useStore } from '../../lib/store';
-import {
-  SentimentType
-} from '../../lib/types';
+import { SentimentType } from '../../lib/types';
 
 export default function Results() {
 	const {
@@ -38,14 +36,21 @@ export default function Results() {
 		};
 	});
 
+  const [completed, setCompleted] = useState({
+    summary: false,
+    sentiment: false,
+    translations: false,
+  });
+
 	const router = useRouter();
-  // Redirect to home if no file; needs to be in useEffect to avoid race condition
-  useEffect(() => {
-    if (!file) router.push('/');
-  }, [file, router]);
+	// Redirect to home if no file
+	useEffect(() => {
+		if (!file) router.push('/');
+	}, [file, router]);
 
 	/** Summary */
 	useEffect(() => {
+    if (summary.text) return;
 		const fetchSummary = async () => {
 			if (file) {
 				const formData = new FormData();
@@ -55,8 +60,10 @@ export default function Results() {
 					body: formData,
 				});
 				const result = await response.json();
-				console.log('summary > result', result);
-				setSummary({text: result.result.response, timeTaken: result.timeTaken});
+				setSummary({
+					text: result.result.response,
+					timeTaken: result.timeTaken,
+				});
 			}
 		};
 
@@ -65,6 +72,7 @@ export default function Results() {
 
 	/** Sentiment */
 	useEffect(() => {
+    if (sentiment.length > 0) return;
 		const fetchSentiment = async () => {
 			if (transcript.text) {
 				const formData = new FormData();
@@ -75,7 +83,6 @@ export default function Results() {
 				});
 				const sentimentResponse: SentimentType = [];
 				const result = await response.json();
-        console.log('sentiment > result', result)
 				result?.result?.map((item: any) => sentimentResponse.push(item));
 				setSentiment(sentimentResponse);
 			}
@@ -89,6 +96,7 @@ export default function Results() {
 			if (transcript.text) {
 				/** Run all the translation requests simultaneously. */
 				const promises = Object.keys(translations).map(async language => {
+          if (translations[language].text) return;
 					const formData = new FormData();
 					formData.append('text', transcript.text);
 					formData.append('target_lang', language);
@@ -97,13 +105,13 @@ export default function Results() {
 						body: formData,
 					});
 					const result = await response.json();
-          console.log('translation > result', result)
+					console.log('translation > result', result);
 					const newText = result.result.translated_text;
-          const timeTaken = result.timeTaken;
-					return { language, newText, timeTaken};
+					const timeTaken = result.timeTaken;
+					return { language, newText, timeTaken };
 				});
 
-				const results = await Promise.all(promises);
+				const results = (await Promise.all(promises)).filter(Boolean);
 				results.forEach(({ language, newText, timeTaken }) => {
 					setTranslations(language, newText, timeTaken);
 				});
@@ -112,57 +120,58 @@ export default function Results() {
 		fetchTranslation();
 	}, [transcript, setTranslations, translations]);
 
-	console.log('transcript', transcript);
 	return (
 		<div className='mx-auto w-4/6'>
-			<div>
-				<ResultControls />
-			</div>
-			{transcript.text ? (
-				<StyledCard
-					header='Transcript'
-					model='OpenAI Whisper'
-					content={transcript.text}
-          timeTaken={transcript.timeTaken}
-				/>
-			) : (
-				<LoadingCard header='Transcript' />
-			)}
-			{summary.text ? (
-				<StyledCard
-					header='Summary'
-					model='Meta Llama 2 7b'
-					content={summary.text}
-          timeTaken={summary.timeTaken}
-				/>
-			) : (
-				<LoadingCard header='Summary' />
-			)}
-			{sentiment.length > 0 ? (
-				<StyledCard
-					header='Sentiment'
-					model='Quantized DistilBERT'
-					content={sentiment}
-				/>
-			) : (
-				<LoadingCard header='Sentiment' />
-			)}
-			{Object.keys(translations).map(language => {
-				return translations[language].text ? (
+			<div className='columns-3xs'>
+				<div>
+					<ResultControls />
+				</div>
+				{transcript.text ? (
 					<StyledCard
-						key={language}
-						header={`${language} Translation`}
-						model='M2M100'
-						content={translations[language].text}
-            timeTaken={translations[language].timeTaken}
+						header='Transcript'
+						model='OpenAI Whisper'
+						content={transcript.text}
+						timeTaken={transcript.timeTaken}
 					/>
 				) : (
-					<LoadingCard
-						key={language}
-						header={`${language} Translation`}
+					<LoadingCard header='Transcript' />
+				)}
+				{summary.text ? (
+					<StyledCard
+						header='Summary'
+						model='Meta Llama 2 7b'
+						content={summary.text}
+						timeTaken={summary.timeTaken}
 					/>
-				);
-			})}
+				) : (
+					<LoadingCard header='Summary' />
+				)}
+				{sentiment.length > 0 ? (
+					<StyledCard
+						header='Sentiment'
+						model='Quantized DistilBERT'
+						content={sentiment}
+					/>
+				) : (
+					<LoadingCard header='Sentiment' />
+				)}
+				{Object.keys(translations).map(language => {
+					return translations[language].text ? (
+						<StyledCard
+							key={language}
+							header={`${language} Translation`}
+							model='M2M100'
+							content={translations[language].text}
+							timeTaken={translations[language].timeTaken}
+						/>
+					) : (
+						<LoadingCard
+							key={language}
+							header={`${language} Translation`}
+						/>
+					);
+				})}
+			</div>
 		</div>
 	);
 }

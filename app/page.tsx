@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { fetchTranscript, processFiles } from '../lib/actions';
 import { useStore } from '../lib/store';
 import DropzoneEmpty from '../components/dropzone-empty';
@@ -92,6 +92,7 @@ export default function Dropzone() {
 
 	const handleFileSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+    console.log('submit fired', e)
 		if (file) {
 			setLoading(true);
 			setSubmitted(true);
@@ -105,6 +106,11 @@ export default function Dropzone() {
 			router.push('/results');
 		}
 	};
+
+  useEffect(() => {
+		if (!file) router.push('/');
+	}, [file, router]);
+
 	return (
 		<div className='flex flex-col w-full justify-center items-center'>
 			<form

@@ -21,8 +21,6 @@ export const SentimentNums = ({ data }: { data: SentimentType }) => {
 		return { name, score: friendlyScore, color };
 	});
 
-  console.log(layoutData, totalScore)
-
 	return (
 		<div className='w-full'>
 			<div className='flex flex-row w-full justify-evenly my-4'>

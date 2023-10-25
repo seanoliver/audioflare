@@ -20,7 +20,7 @@ export default function RootLayout({
 	return (
 		<html lang='en'>
 			<body
-				className={`${inter.className} dark:bg-indigo-900 bg-indigo-50 text-indigo-800 w-screen h-screen dark:text-indigo-300 flex flex-col justify-between`}>
+				className={`${inter.className} w-screen h-screen  flex flex-col justify-between`}>
 				<Toaster position='bottom-right' />
         <Header />
 				<div>{children}</div>

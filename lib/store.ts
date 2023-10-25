@@ -62,5 +62,5 @@ export const useStore = create<Store>(set => ({
 			},
 		}));
 	},
-	clear: () => set({ ...initialState }),
+	clear: () => set(initialState),
 }));
