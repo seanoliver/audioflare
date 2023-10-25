@@ -22,7 +22,6 @@ export function SeparatorDemo() {
 						height: '225px',
 						backgroundSize: 'cover',
 					}}
-					alt='Audioflare'
 				/>
 				{/* <h4 className="text-lg font-semibold leading-none text-center">Audioflare</h4> */}
 				<p className='text-sm text-muted-foreground text-center'>
