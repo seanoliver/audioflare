@@ -31,18 +31,23 @@ export function SeparatorDemo() {
 			</div>
 
 			<div className='flex h-5 items-center space-x-4 text-sm mt-4'>
-        <a
-          href='https://github.com/seanoliver/audioflare'
-          target='_blank'
-          rel='noopener noreferrer'>
-				<Button variant='link'>
-					<GitHubLogoIcon className='mr-2' /> Source
-				</Button>
-        </a>
-				<Button variant='link'>
-					<FileIcon className='mr-2' />
-					Cloudflare Docs
-				</Button>
+				<a
+					href='https://github.com/seanoliver/audioflare'
+					target='_blank'
+					rel='noopener noreferrer'>
+					<Button variant='link'>
+						<GitHubLogoIcon className='mr-2' /> Source
+					</Button>
+				</a>
+				<a
+					href='https://developers.cloudflare.com/ai/'
+					target='_blank'
+					rel='noopener noreferrer'>
+					<Button variant='link'>
+						<FileIcon className='mr-2' />
+						Cloudflare Docs
+					</Button>
+				</a>
 			</div>
 		</div>
 	);

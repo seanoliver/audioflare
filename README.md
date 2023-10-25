@@ -36,7 +36,7 @@
     <li>
       <a href="#about-the-project">About The Project</a>
       <ul>
-         <li><a href="#screenshots">Screenshots</a></li>
+         <li><a href="#demo">Demo</a></li>
         <li><a href="#key-features">Key Features</a></li>
         <li><a href="#built-with">Built With</a></li>
       </ul>
@@ -85,24 +85,10 @@ As Cloudflare broadens its model support, I look forward to refining Audioflare,
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Screenshots
+### Demo
 
 <p>
-  <img src="static/images/screenshots/timeline.png" alt="Logged In Timeline">
-  <br>
-  <em>Logged-In Timeline</em>
-</p>
-
-<p>
-  <img src="static/images/screenshots/profile.png" alt="User Profile Page">
-  <br>
-  <em>User Profile Page</em>
-</p>
-
-<p>
-  <img src="static/images/screenshots/followers.png" alt="Followers Listing Page">
-  <br>
-  <em>Followers Listing Page</em>
+  <img src="public/images/audioflare-demo.gif" alt="Audioflare Demo">
 </p>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
