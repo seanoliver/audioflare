@@ -15,7 +15,8 @@ export function SeparatorDemo() {
 		<div className='flex flex-col items-center my-20'>
 			<div className='h-1'></div>
 			<div className='space-y-1'>
-				<div
+				<a href='/'>
+        <div
 					style={{
 						backgroundImage: 'var(--logo)',
 						width: '400px',
@@ -23,7 +24,8 @@ export function SeparatorDemo() {
 						backgroundSize: 'cover',
 					}}
 				/>
-				{/* <h4 className="text-lg font-semibold leading-none text-center">Audioflare</h4> */}
+        </a>
+
 				<p className='text-sm text-muted-foreground text-center'>
 					Transcribe, Analyze, Translate: All in One Cloudflare Playground
 				</p>
