@@ -171,7 +171,7 @@ To get a local copy up and running follow these simple steps.
     wrangler login
     ```
 
-5. Create a `.env` file using the `.env.example` file as a template
+5. Rename `.env.example` to `.env` and follow the instructions linked in the comments to find each of the required keys and values.
 
 6. Run the app
 

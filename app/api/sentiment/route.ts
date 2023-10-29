@@ -3,7 +3,7 @@ import { getGatewayUrl } from '../../../lib/utils';
 
 export async function POST(req: NextRequest) {
   const startTime = process.hrtime.bigint();
-	const { CLOUDFLARE_AUTH_TOKEN: authToken } = process.env;
+	const { CLOUDFLARE_API_TOKEN: authToken } = process.env;
 
 	if (!authToken)
 		return NextResponse.json(

@@ -46,22 +46,21 @@ export const belowFileSizeLimit = (file: File) => {
 
 export const getGatewayUrl = (model: keyof typeof CLOUDFLARE_MODELS) => {
   const {
-    CLOUDFLARE_REST_API_KEY: apiKey,
+    CLOUDFLARE_ACCOUNT_ID: accountId,
+    CLOUDFLARE_AI_GATEWAY_ENDPOINT: gatewayEndpoint,
+    CLOUDFLARE_AI_GATEWAY_URL_SLUG: gatewayUrlSlug,
+    CLOUDFLARE_AI_GATEWAY_PROVIDER: gatewayProvider
   } = process.env;
 
   const cfModel = CLOUDFLARE_MODELS[model];
 
-  const gatewayEndpoint = 'https://gateway.ai.cloudflare.com/v1'
-  const gatewayName = 'tldh'
-  const gatewayProvider = 'workers-ai'
 
-  return `${gatewayEndpoint}/${apiKey}/${gatewayName}/${gatewayProvider}/${cfModel}`
+  return `${gatewayEndpoint}/${accountId}/${gatewayUrlSlug}/${gatewayProvider}/${cfModel}`
 }
 
 export const msToTime = (duration: number) => {
   const milliseconds = Math.floor((duration % 1000) / 100),
     seconds = Math.floor((duration / 1000) % 60);
-
 
   const secondsStr = (seconds < 10) ? seconds : seconds;
 
