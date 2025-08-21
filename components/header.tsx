@@ -5,6 +5,7 @@ import {
 } from '@radix-ui/react-icons';
 import { Button } from './ui/button';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Header() {
 	return <SeparatorDemo />;
@@ -15,7 +16,7 @@ export function SeparatorDemo() {
 		<div className='flex flex-col items-center my-20'>
 			<div className='h-1'></div>
 			<div className='space-y-1'>
-				<a href='/'>
+				<Link href='/'>
         <div
 					style={{
 						backgroundImage: 'var(--logo)',
@@ -24,7 +25,7 @@ export function SeparatorDemo() {
 						backgroundSize: 'cover',
 					}}
 				/>
-        </a>
+        </Link>
 
 				<p className='text-sm text-muted-foreground text-center'>
 					Transcribe, Analyze, Translate: All in One Cloudflare Playground
